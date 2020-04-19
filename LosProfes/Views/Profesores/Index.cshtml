@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Usuario> SignInManager
+@inject UserManager<Usuario> UserManager
+@model IEnumerable<LosProfes.Models.Profesor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (User.IsInRole("admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfesoresFormaciones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfesoresIdiomas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfesoresMaterias)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genero.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Usuario.NombreUsuario)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (ProfesorFormacion profesorFormacion in item.ProfesoresFormaciones)
+                        {
+                            <li>@profesorFormacion.Formacion.Nombre</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (ProfesorIdioma profesorIdioma in item.ProfesoresIdiomas)
+                        {
+                            <li>@profesorIdioma.Idioma.Nombre</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (ProfesorMateria profesorMateria in item.ProfesoresMaterias)
+                        {
+                            <li>@profesorMateria.Materia.Nombre</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @if (User.IsInRole("profe") || User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> @: |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> @: |
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
